@@ -26,3 +26,26 @@ git remote add <origin> <URL>
 git push -u <origin>/main <new_branch_name>
 \end{shellcmd}
 就这样，一个本地仓库就可以对应多个远程仓库了。
+
+\subsection{拆分仓库}
+\begin{enumerate}
+	\item 准备工具
+	      \begin{shellcmd}
+		brew install git-filter-repo
+		\end{shellcmd}
+	\item 克隆旧仓库到新的目录
+	      \begin{shellcmd}
+		git clone <old_repo_url> <new_repo_dir>
+		\end{shellcmd}
+	\item 拆分
+	      \begin{shellcmd}
+		git repo-filter --subdirectory-filter <dir>
+		# 将<dir>以外的内容过滤掉
+		\end{shellcmd}
+	\item 新建一个远程仓库，并添加到过滤后的新仓库，推送即可
+	\item 将本地的旧仓库去除过滤的目录及相关的提交
+	      \begin{shellcmd}
+		git filter-repo --path <filtered-dir> --invert-paths
+		\end{shellcmd}
+	\item 删除远程仓库，新建一个同名的远程仓库再添加到更新后的本地旧仓库，推送即可
+\end{enumerate}
