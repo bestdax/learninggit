@@ -3,3 +3,26 @@
 git remote add <origin> <URL>
 git remote prune <origin> # 删除远程仓库在不存在的分支
 \end{shellcmd}
+
+不知道是不是应该写在这个章节里面，最近对Git本地的仓库做了两件大事：
+
+\begin{enumerate}
+	\item 将Rime仓库一个仓库推送到两个远程(public的部分把隐私的信息去除)
+	\item 将dotfiles仓库中的nvim配置及ohmyzsh的配置分离出来
+\end{enumerate}
+
+下面分别来将这两个过程记录一下。
+
+\subsection{一对多推送}
+这个过程需要解决从原来的主分支建立一个全新孤立分支，因为我的隐私信息是从第一次提交就有的。因为以前对Git还不了解，觉得以前的历史没有什么用，当时是把\shin{.git}文件夹删除了以后重新初始化的。
+\begin{shellcmd}
+	git checkout -b <new_branch_name> --orphan <commit>
+\end{shellcmd}
+这个命令会创建一个名为\shin{<new_branch_name>}的分支，内容是基于\\\shin{<commit>}，然后将\shin{<new_branch_name>}作为它的新分支。这时这个分支上的提交记录是空白的，所有的文件都存放在暂存区，把隐私文件从暂存区里面推出，然后删除掉隐私信息再加入到暂存区，然后提交就可以了。
+
+下一步在远程创建一个新的仓库，并在本地添加进来，用下面的命令：
+\begin{shellcmd}
+git remote add <origin> <URL>
+git push -u <origin>/main <new_branch_name>
+\end{shellcmd}
+就这样，一个本地仓库就可以对应多个远程仓库了。
