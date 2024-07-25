@@ -26,6 +26,14 @@ title={CMD \thetcbcounter},
 % after=\end{figure},
 % 不知道什么原因在这里不能插入
 #1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newmintinline{shell}{}
+\newcommand{\shin}[1]{{\begin{tikzpicture}[baseline=(code.base)]
+				\node[inner sep=2pt, text height=8pt, text depth=2pt, rounded corners, fill=green!5,
+					draw=green!50!black](code){\shellinline[escapeinside=||]{#1}};
+				\useasboundingbox ([xshift=-1pt]current bounding box.west) rectangle ([xshift=1pt]current bounding box.east);
+			\end{tikzpicture}}}
+
 
 \title{Git学习笔记}
 \author{dax}
@@ -37,7 +45,5 @@ title={CMD \thetcbcounter},
 \include{gitpush}
 \include{gitremote}
 \include{gitrevert}
-
-
 
 \end{document}
