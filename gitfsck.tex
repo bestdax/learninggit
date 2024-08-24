@@ -1,0 +1,38 @@
+\section{git fsck}
+
+\shin{git fsck} 是 \shin{Git} 中的一个命令，用于检查 \shin{Git} 存储库的完整性。它会扫描 \shin{Git} 仓库中的所有对象（如提交对象、树对象、标签对象等），并检查是否存在损坏、丢失或其他异常。该命令主要用于诊断和修复潜在的问题。
+
+\subsection*{主要功能}
+\begin{itemize}
+	\item \textbf{验证对象完整性}：\shin{git fsck} 会检查所有的对象是否存在，且是否符合预期的哈希值。
+	\item \textbf{查找悬空对象}：它可以找到未被引用的对象，这些对象可能是因为重写历史或其他原因而丢失的提交。
+	\item \textbf{报告问题}：如果存储库中的任何对象出现问题，\shin{git fsck} 会列出具体的错误信息和可能的问题。
+\end{itemize}
+
+\subsection*{常用选项}
+\begin{itemize}
+	\item \texttt{--full}：执行全面的检查。默认情况下，\shin{git fsck} 只进行轻量级检查，但使用此选项可以执行更深入的检查。
+	\item \texttt{--unreachable}：显示无法访问的对象，即那些未被任何引用（如分支、标签）引用的对象。
+	\item \texttt{--no-dangling}：不报告悬空的对象。
+	\item \texttt{--lost-found}：对于找不到引用的对象，\shin{Git} 会将它们放在\\ \shin{.git/lost-found} 目录下。
+\end{itemize}
+
+\subsection*{使用示例}
+\begin{shellcmd}
+git fsck
+\end{shellcmd}
+
+运行上面的命令后，\shin{Git} 会扫描整个存储库并输出任何找到的问题。
+
+\subsection*{应用场景}
+\begin{itemize}
+	\item \textbf{诊断存储库问题}：当怀疑存储库损坏或数据丢失时，可以使用\\ \shin{git fsck} 来检查存储库的健康状态。
+	\item \textbf{恢复丢失的提交}：如果一些提交被意外丢失，可以通过 \shin{git fsck} 找到悬空的对象并进行恢复。
+\end{itemize}
+
+总的来说，\shin{git fsck} 是一个非常有用的工具，可以帮助你维护 \shin{Git} 存储库的健康和完整性。
+
+\subsection*{实际案例}
+我在把代码添加到暂存区后，发现有一个编译的文件夹也被添加进去了，然后进行了一次误操作，用了\shin{git reset
+	--hard}，这下退回到之前的提交，但是新增加的内容丢失了。幸好用\shin{git fsck --lost-found}查找到悬空对象，然后用\shin{git show <blob
+	hash>}逐个查找到丢失的文件。最后用 \shin{git show <blob hash> > filename}成功将文件恢复。
